@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package anton.events;
+
+import "capabilities.proto";
+
+message PhoneCallEvent {
+}
+
+message TextMessageEvent {
+
+}
+
+message MediaEvent {
+
+}
+
+message DeviceDiscoveryEvent {
+  string vendor_device_id = 1;
+
+  capabilities.Capabilities capabilities = 2;
+}
+
+message DeviceRegistrationEvent {
+  enum EventType {
+    UNKNOWN = 0;
+    SUCCESS = 1;
+    FAILURE = 2;
+    INFO = 3;
+  }
+
+  EventType event_type = 1;
+  string event_message = 2;
+}
+
+message GenericEvent {
+  string device_id = 1;
+
+  string notification_id = 2;
+
+  oneof event_type {
+    PhoneCallEvent phone_call = 3;
+    TextMessageEvent text_message = 4;
+    MediaEvent media = 5;
+    DeviceDiscoveryEvent discovery = 6;
+    DeviceRegistrationEvent device_registration = 7;
+  }
+}

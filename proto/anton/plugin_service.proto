@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package anton.antonenv;
+
+import "events.proto";
+import "instructions.proto";
+import "call_status.proto";
+
+service RemotePluginService {
+  rpc send_event(stream events.GenericEvent) returns (stream rpc.CallStatus) {}
+
+  rpc wait_instruction(stream rpc.CallStatus)
+      returns (stream events.GenericInstruction) {}
+}

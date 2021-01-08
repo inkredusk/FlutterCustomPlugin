@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package anton.plugins;
+
+enum PipeType {
+  PIPETYPE_UNKNOWN = 0;
+  IOT_INSTRUCTION = 1;
+  IOT_EVENTS = 2;
+  STATUS_QUERY = 3;
+}
+
+message PipeInfo {
+  string pipe_id = 1;
+
+  PipeType pipe_type = 2;
+}
+
+message PluginLoadInfo {
+  enum PluginRuntimeType {
+    RUNTIME_UNKNOWN = 0;
+    CPP_SHARED_OBJECT = 1;
+    PY2 = 2;
+    PY3 = 3;
+  }
+
+  message CPPSharedObjectInfo {
+    string shared_object_path = 1;
+  }
+
+  message PythonRuntimInfo {
+    string main_service_class = 1;
+
+    repeated string dependencies = 2;
+  }
+
+  PluginRuntimeType runtime_type = 1;
+
+  oneof plugin_runtime_info {
+    CPPSharedObjectInfo cpp_so_info = 2;
+
+    PythonRuntimInfo py2_runtime_info = 3;
+
+    PythonRuntimInfo py3_runtime_info = 4;
+  }
+
+  int32 start_timeout_secs = 5;
+
+  repeated PipeInfo pipes = 6;
+}
+
+message PluginInfo {
+  string name = 1;
+
+  string description = 2;
+
+  string remote_url = 3;
+}
+
+message PluginConfig {
+  PluginInfo metadata = 1;
+
+  PluginLoadInfo runtime = 2;
+}
+
+message PluginStartupInfo {
+  string plugin_id = 1;
+
+  string auth_token = 2;
+
+  string data_dir = 3;
+}
+
+message PluginStatus {
+  PluginInfo info = 1;
+
+  enum PluginState {
+    UNKNOWN = 0;
+    NOT_INSTALLED = 1;
+    DISABLED = 2;
+    INACTIVE = 3;
+    CONFIG_ERROR = 4;
+    LOAD_ERROR = 5;
+    ACTIVE = 6;
+  }
+
+  PluginState state = 2;
+}
+
+message AllPlugins {
+  repeated PluginStatus plugin_status = 1;
+}

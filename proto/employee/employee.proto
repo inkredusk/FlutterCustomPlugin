@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option java_package = "com.example.flutter_plugin_dialog_box";
+
+message Employee {
+  string name = 1;
+  int32 age = 2;
+}

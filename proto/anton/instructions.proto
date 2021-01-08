@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package anton.events;
+
+enum MediaState {
+  UNKNOWN = 0;
+  PAUSE_PLAY = 1;
+  STOP = 2;
+  PLAY = 3;
+  PAUSE = 4;
+}
+
+enum PowerState {
+  STATE_UNKNOWN = 0;
+  POWER_OFF = 1;
+  POWER_ON = 2;
+}
+
+enum VolumeControl {
+  VOLUME_CONTROL_UNKNOWN = 0;
+  VOLUME_UP = 1;
+  VOLUME_DOWN = 2;
+  VOLUME_MUTE = 3;
+}
+
+message LightColorInstruction {
+  int32 red = 1;
+  int32 green = 2;
+  int32 blue = 3;
+  int32 brightness = 4;
+}
+
+message SimpleNotification {
+  string text = 1;
+  bytes icon_bytes = 2;
+}
+
+message MediaNotification {
+  string track_name = 1;
+  string album_name = 2;
+  bytes album_art = 3;
+}
+
+message MediaOpenInstruction {
+  string url = 1;
+}
+
+message DeviceRegistrationInstruction {
+  int32 execute_step = 1;
+}
+
+message GenericInstruction {
+  string device_id = 1;
+
+  oneof Instruction {
+    DeviceRegistrationInstruction device_registration_instruction = 2;
+    PowerState power_state_instruction = 3;
+    VolumeControl volume_control_instruction = 4;
+    LightColorInstruction light_color_instruction = 5;
+    SimpleNotification simple_notification_instruction = 6;
+    MediaNotification media_notification_instruction = 7;
+    MediaOpenInstruction media_open_instruction = 8;
+  }
+}
+

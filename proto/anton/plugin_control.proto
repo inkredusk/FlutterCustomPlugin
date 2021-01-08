@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package anton.plugins;
+
+enum ControlRequestType {
+  REQUEST_TYPE_NONE = 0;
+  HEARTBEAT = 1;
+  KILL = 2;
+}
+
+message HeartbeatRequest {
+  int32 time_usec = 1;
+}
+
+message HeartbeatResponse {
+  bool alive = 1;
+}
+
+message KillRequest {
+  int32 kill_within_used = 1;
+}
+
+enum KillResponse {
+  KILL_RESPONSE_NONE = 0;
+  KILL_ACKNOWLEDGE = 1;
+}
+
+message ControlRequest {
+  ControlRequestType message_type = 1;
+
+  oneof RequestData {
+    HeartbeatRequest heartbeat = 2;
+
+    KillRequest kill = 3;
+  }
+}
+
+message ControlResponse {
+  ControlRequestType message_type = 1;
+
+  oneof response_type {
+    HeartbeatResponse heartbeat = 2;
+
+    KillResponse kill = 3;
+  }
+}
+
